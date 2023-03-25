@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,16 +15,21 @@ export class UserService {
   {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = await this.userModel.create( createUserDto );
-    return user;
+    try {
+      const user = await this.userModel.create( createUserDto );
+      return user;
+    } catch (error) {
+      if( error.code === 11000 ) throw new BadRequestException( `The user already exist` )
+      throw new InternalServerErrorException( `Can't be create user` );
+    }
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    return await this.userModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    return await this.userModel.findById(id).exec();
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
