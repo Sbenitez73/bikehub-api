@@ -9,7 +9,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('BikeHub')
-    .setDescription('Bike App API - powered by nest')
+    .setDescription('Bike REST FUL API')
     .setVersion('1.0')
     .addTag('bike')
     .build();
@@ -24,6 +24,6 @@ async function bootstrap() {
     })
   );
 
-  await app.listen(3000);
+  await app.listen( 3000 );
 }
 bootstrap();
